@@ -1,0 +1,61 @@
+
+name: Deploy Retail Sales Data Analytics Website
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+      # Step 1: Download repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Configure GitHub Pages
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      # Step 3: Validate frontend files
+      - name: Validate frontend structure
+        run: |
+          test -f frontend/index.html
+          test -f frontend/cleaning.html
+          test -f frontend/eda.html
+          test -f frontend/dashboard.html
+          test -f frontend/insights.html
+          test -d frontend/css
+          test -d frontend/js
+          test -d frontend/assets
+          echo "Frontend validation successful."
+
+      # Step 4: Upload frontend as Pages artifact
+      - name: Upload GitHub Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend
+
+      # Step 5: Deploy website
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

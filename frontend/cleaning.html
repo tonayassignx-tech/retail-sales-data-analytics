@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Data Cleaning Preparation | Retail Analytics</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: #12345a;
+            font-size: 25px;
+        }
+
+        .page-header p {
+            color: #78879a;
+            font-size: 13px;
+        }
+
+        .cleaning-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .action-btn {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            color: white;
+            background: #0879c9;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .action-btn.green-btn {
+            background: #20a77d;
+        }
+
+        .action-btn:hover {
+            opacity: 0.85;
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .data-table th {
+            background: #eef4fa;
+            color: #12345a;
+            text-align: left;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 13px;
+            border-bottom: 1px solid #e5eaf1;
+        }
+
+        .data-table tr:hover {
+            background: #f8fbff;
+        }
+
+        .result-message {
+            margin-top: 15px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .quality-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            background: #e0f7ef;
+            color: #16865e;
+            font-size: 11px;
+        }
+
+        .warning-indicator {
+            background: #fff0dc;
+            color: #c27b15;
+        }
+
+        .empty-state {
+            color: #78879a;
+            padding: 20px 0;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <img src="assets/logo.png" alt="Retail Analytics Logo">
+            <h2>Retail Analytics</h2>
+        </div>
+
+        <p class="menu-label">MAIN MENU</p>
+
+        <nav class="navigation">
+
+            <a href="index.html" class="nav-link">
+                <span>⌂</span> Dashboard
+            </a>
+
+            <a href="cleaning.html" class="nav-link active">
+                <span>▤</span> Data Cleaning Preparation
+            </a>
+
+            <a href="eda.html" class="nav-link">
+                <span>⌕</span> Exploratory Data Analysis
+            </a>
+
+            <a href="dashboard.html" class="nav-link">
+                <span>▥</span> Data Visualisation & Dashboard
+            </a>
+
+            <a href="insights.html" class="nav-link">
+                <span>✧</span> Insights & Recommendations
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Retail Sales Data Analytics</p>
+            <small>Academic Project | 2026</small>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <div>
+                <h2>Data Preparation</h2>
+                <p>Dataset quality assessment and cleaning</p>
+            </div>
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                Data Analysis
+            </div>
+
+        </header>
+
+
+        <!-- PAGE INTRODUCTION -->
+        <section class="page-header">
+
+            <h1>Data Cleaning Preparation</h1>
+
+            <p>
+                Examine dataset quality, identify missing values,
+                detect duplicate records and prepare reliable
+                data for further analysis.
+            </p>
+
+        </section>
+
+
+        <!-- DATASET SUMMARY -->
+        <section class="kpi-grid">
+
+            <div class="kpi-card">
+                <div class="kpi-icon blue">▤</div>
+                <p>Total Records</p>
+                <h2 id="cleanRows">--</h2>
+                <small>Dataset rows</small>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon purple">▥</div>
+                <p>Total Columns</p>
+                <h2 id="cleanColumns">--</h2>
+                <small>Dataset variables</small>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon orange">!</div>
+                <p>Missing Values</p>
+                <h2 id="missingValues">--</h2>
+                <small>Incomplete entries</small>
+            </div>
+
+            <div class="kpi-card">
+                <div class="kpi-icon green">✓</div>
+                <p>Duplicate Rows</p>
+                <h2 id="duplicateRows">--</h2>
+                <small>Repeated records</small>
+            </div>
+
+        </section>
+
+
+        <!-- DATA QUALITY -->
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Data Quality Assessment</h2>
+
+                    <p>
+                        Overview of missing values and duplicate records.
+                    </p>
+                </div>
+
+                <span class="csv-badge">DATA QUALITY</span>
+
+            </div>
+
+            <div id="qualityStatus" class="empty-state">
+                Upload a CSV dataset to view its quality assessment.
+            </div>
+
+            <div class="cleaning-actions">
+
+                <button
+                    class="action-btn"
+                    id="refreshBtn"
+                    onclick="loadCleaningData()">
+                    Refresh Analysis
+                </button>
+
+                <button
+                    class="action-btn green-btn"
+                    id="duplicateBtn"
+                    onclick="applyCleaning('remove_duplicates')">
+                    Remove Duplicates
+                </button>
+
+                <button
+                    class="action-btn green-btn"
+                    id="missingBtn"
+                    onclick="applyCleaning('fill_missing')">
+                    Fill Missing Values
+                </button>
+
+            </div>
+
+            <div id="cleaningMessage" class="result-message"></div>
+
+        </section>
+
+
+        <!-- COLUMN DETAILS -->
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <div>
+                    <h2>Column Information</h2>
+
+                    <p>
+                        Review variable names, data types
+                        and missing-value counts.
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="data-table">
+
+                    <thead>
+                        <tr>
+                            <th>Column Name</th>
+                            <th>Data Type</th>
+                            <th>Missing Values</th>
+                            <th>Quality Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="columnTable">
+
+                        <tr>
+                            <td colspan="4" class="empty-state">
+                                No dataset information available.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer>
+            <p>
+                © 2026 Retail Sales Data Analytics |
+                Data Cleaning Module
+            </p>
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script src="js/cleaning.js"></script>
+
+</body>
+</html>

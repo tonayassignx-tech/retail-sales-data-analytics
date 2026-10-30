@@ -1,0 +1,584 @@
+
+/* =====================================
+   RETAIL SALES DATA ANALYTICS
+   Main Website Stylesheet
+===================================== */
+
+/* GLOBAL SETTINGS */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #12345a;
+    --secondary: #0879c9;
+    --accent: #20b486;
+    --background: #f4f7fb;
+    --white: #ffffff;
+    --text: #25364a;
+    --muted: #78879a;
+    --border: #e5eaf1;
+}
+
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+
+/* =====================================
+   MAIN LAYOUT
+===================================== */
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.sidebar {
+    width: 260px;
+    background: var(--primary);
+    color: var(--white);
+    padding: 25px 17px;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 8px 30px;
+}
+
+.brand img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    background: white;
+    border-radius: 10px;
+}
+
+.brand h2 {
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.menu-label {
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #aabbd0;
+    margin: 10px 10px 15px;
+}
+
+.navigation {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 13px 12px;
+    border-radius: 8px;
+    color: #d3deeb;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.nav-link span {
+    font-size: 19px;
+    width: 23px;
+    text-align: center;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    background: #24517e;
+    color: white;
+}
+
+.nav-link.active {
+    border-left: 3px solid #39b8ff;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding: 20px 8px 5px;
+    border-top: 1px solid #34516e;
+    color: #d3deeb;
+}
+
+.sidebar-footer p {
+    font-size: 12px;
+}
+
+.sidebar-footer small {
+    font-size: 10px;
+    color: #aabbd0;
+}
+
+
+/* =====================================
+   MAIN CONTENT
+===================================== */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    padding: 30px 35px;
+}
+
+
+/* =====================================
+   TOP NAVIGATION
+===================================== */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 28px;
+}
+
+.topbar h2 {
+    font-size: 23px;
+    color: var(--primary);
+}
+
+.topbar p {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 8px 14px;
+    font-size: 12px;
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+    background: var(--accent);
+    border-radius: 50%;
+}
+
+
+/* =====================================
+   WELCOME SECTION
+===================================== */
+
+.welcome-section {
+    background: linear-gradient(
+        120deg,
+        #12345a,
+        #0879c9
+    );
+    color: white;
+    padding: 35px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    min-height: 185px;
+}
+
+.welcome-tag {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #b9e4ff;
+    margin-bottom: 10px;
+}
+
+.welcome-section h1 {
+    font-size: 27px;
+    margin-bottom: 10px;
+}
+
+.welcome-section p {
+    font-size: 13px;
+    color: #e0efff;
+    max-width: 650px;
+}
+
+.welcome-icon {
+    font-size: 75px;
+    padding: 15px;
+}
+
+
+/* =====================================
+   KPI CARDS
+===================================== */
+
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.kpi-card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(20, 50, 80, 0.03);
+}
+
+.kpi-card p {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 10px 0 4px;
+}
+
+.kpi-card h2 {
+    font-size: 25px;
+    color: var(--primary);
+}
+
+.kpi-card small {
+    font-size: 11px;
+    color: var(--muted);
+}
+
+.kpi-icon,
+.module-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.blue {
+    background: #e4f2ff;
+    color: #0879c9;
+}
+
+.green {
+    background: #e0f7ef;
+    color: #20a77d;
+}
+
+.purple {
+    background: #eee9ff;
+    color: #7955d6;
+}
+
+.orange {
+    background: #fff0dc;
+    color: #e79527;
+}
+
+
+/* =====================================
+   CONTENT CARDS
+===================================== */
+
+.content-card {
+    background: white;
+    border: 1px solid var(--border);
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.section-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.section-heading h2 {
+    font-size: 19px;
+    color: var(--primary);
+}
+
+.section-heading p {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.csv-badge {
+    background: #e0f7ef;
+    color: #16865e;
+    font-size: 10px;
+    padding: 7px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+
+/* =====================================
+   CSV UPLOAD AREA
+===================================== */
+
+.upload-area {
+    border: 2px dashed #cbd9e9;
+    border-radius: 12px;
+    padding: 30px 15px;
+    text-align: center;
+    background: #f9fbfe;
+}
+
+.upload-symbol {
+    font-size: 38px;
+    margin-bottom: 10px;
+}
+
+.upload-area h3 {
+    font-size: 17px;
+    color: var(--primary);
+    margin-bottom: 5px;
+}
+
+.upload-area p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 15px;
+}
+
+.primary-button,
+.upload-button {
+    border: none;
+    padding: 11px 22px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.primary-button {
+    background: var(--secondary);
+    color: white;
+}
+
+.primary-button:hover {
+    background: #075fa0;
+}
+
+.upload-button {
+    background: var(--accent);
+    color: white;
+    margin-top: 10px;
+}
+
+.upload-button:hover:not(:disabled) {
+    background: #168f6b;
+}
+
+.upload-button:disabled {
+    background: #aab7c5;
+    cursor: not-allowed;
+}
+
+.file-name {
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--primary);
+}
+
+.upload-status {
+    margin-top: 12px;
+    font-weight: 600;
+}
+
+
+/* =====================================
+   ANALYTICAL MODULES
+===================================== */
+
+.modules-section {
+    margin-bottom: 30px;
+}
+
+.modules-section > .section-heading {
+    margin-bottom: 17px;
+}
+
+.module-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.module-card {
+    display: block;
+    background: white;
+    border: 1px solid var(--border);
+    padding: 22px;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+
+.module-card:hover {
+    transform: translateY(-3px);
+    border-color: #80bce8;
+    box-shadow: 0 7px 20px rgba(20, 50, 80, 0.07);
+}
+
+.module-card h3 {
+    font-size: 15px;
+    margin: 13px 0 7px;
+    color: var(--primary);
+}
+
+.module-card p {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 15px;
+}
+
+.module-card > span {
+    color: var(--secondary);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =====================================
+   FOOTER
+===================================== */
+
+footer {
+    text-align: center;
+    padding: 20px 10px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+/* =====================================
+   RESPONSIVE DESIGN
+===================================== */
+
+@media (max-width: 1100px) {
+
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .main-content {
+        padding: 25px 20px;
+    }
+
+}
+
+@media (max-width: 750px) {
+
+    .app-container {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .brand {
+        padding-bottom: 15px;
+    }
+
+    .navigation {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .nav-link {
+        font-size: 11px;
+        padding: 10px;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .main-content {
+        padding: 20px 15px;
+    }
+
+    .welcome-section {
+        padding: 25px 20px;
+    }
+
+    .welcome-section h1 {
+        font-size: 21px;
+    }
+
+    .welcome-icon {
+        display: none;
+    }
+
+    .module-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+@media (max-width: 420px) {
+
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        gap: 10px;
+        flex-direction: column;
+    }
+
+    .navigation {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* Upload status messages */
+
+.upload-status.success {
+    color: #16865e;
+}
+
+.upload-status.error {
+    color: #dc3545;
+}
+
+.upload-status.loading {
+    color: #0879c9;
+}

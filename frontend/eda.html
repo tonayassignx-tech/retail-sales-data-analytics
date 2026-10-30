@@ -1,0 +1,429 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Exploratory Data Analysis | Retail Analytics</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .page-header {
+            margin-bottom: 25px;
+        }
+
+        .page-header h1 {
+            color: #12345a;
+            font-size: 25px;
+        }
+
+        .page-header p {
+            color: #78879a;
+            font-size: 13px;
+        }
+
+        .eda-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 25px;
+        }
+
+        .eda-card {
+            background: white;
+            border: 1px solid #e5eaf1;
+            border-radius: 12px;
+            padding: 22px;
+            min-width: 0;
+        }
+
+        .eda-card h3 {
+            color: #12345a;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .eda-card p {
+            color: #78879a;
+            font-size: 12px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 12px;
+        }
+
+        .data-table th {
+            background: #eef4fa;
+            color: #12345a;
+            text-align: left;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e5eaf1;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        .refresh-btn {
+            border: none;
+            padding: 10px 18px;
+            background: #0879c9;
+            color: white;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .refresh-btn:hover {
+            background: #075fa0;
+        }
+
+        .analysis-status {
+            font-size: 13px;
+            margin-top: 12px;
+            color: #0879c9;
+        }
+
+        .frequency-section {
+            margin-bottom: 25px;
+        }
+
+        .frequency-block {
+            margin-top: 18px;
+            padding: 15px;
+            background: #f8fbfe;
+            border-radius: 8px;
+        }
+
+        .frequency-block h4 {
+            color: #12345a;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .frequency-block p {
+            padding: 5px 0;
+            border-bottom: 1px solid #e5eaf1;
+        }
+
+        .empty-state {
+            color: #78879a;
+            font-size: 13px;
+            padding: 15px 0;
+        }
+
+        @media (max-width: 750px) {
+            .eda-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+
+            <img src="assets/logo.png" alt="Retail Analytics Logo">
+
+            <h2>Retail Analytics</h2>
+
+        </div>
+
+        <p class="menu-label">MAIN MENU</p>
+
+        <nav class="navigation">
+
+            <a href="index.html" class="nav-link">
+                <span>⌂</span> Dashboard
+            </a>
+
+            <a href="cleaning.html" class="nav-link">
+                <span>▤</span> Data Cleaning Preparation
+            </a>
+
+            <a href="eda.html" class="nav-link active">
+                <span>⌕</span> Exploratory Data Analysis
+            </a>
+
+            <a href="dashboard.html" class="nav-link">
+                <span>▥</span> Data Visualisation & Dashboard
+            </a>
+
+            <a href="insights.html" class="nav-link">
+                <span>✧</span> Insights & Recommendations
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+
+            <p>Retail Sales Data Analytics</p>
+
+            <small>Academic Project | 2026</small>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOP BAR -->
+
+        <header class="topbar">
+
+            <div>
+                <h2>Exploratory Analysis</h2>
+                <p>Statistical analysis and data exploration</p>
+            </div>
+
+            <div class="system-status">
+                <span class="status-dot"></span>
+                Analysis Module
+            </div>
+
+        </header>
+
+
+        <!-- PAGE HEADER -->
+
+        <section class="page-header">
+
+            <h1>Exploratory Data Analysis</h1>
+
+            <p>
+                Explore the retail dataset through descriptive
+                statistics, numerical analysis and categorical
+                frequency distributions.
+            </p>
+
+            <br>
+
+            <button class="refresh-btn" onclick="loadEDA()">
+                Refresh Analysis
+            </button>
+
+            <p id="edaStatus" class="analysis-status">
+                Waiting for dataset...
+            </p>
+
+        </section>
+
+
+        <!-- DATASET OVERVIEW -->
+
+        <section class="kpi-grid">
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon blue">▤</div>
+
+                <p>Total Records</p>
+
+                <h2 id="edaRows">--</h2>
+
+                <small>Dataset entries</small>
+
+            </div>
+
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon purple">▥</div>
+
+                <p>Total Variables</p>
+
+                <h2 id="edaColumns">--</h2>
+
+                <small>Dataset columns</small>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon green">#</div>
+
+                <p>Numeric Variables</p>
+
+                <h2 id="numericCount">--</h2>
+
+                <small>Quantitative fields</small>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <div class="kpi-icon orange">Aa</div>
+
+                <p>Categorical Variables</p>
+
+                <h2 id="categoricalCount">--</h2>
+
+                <small>Qualitative fields</small>
+
+            </div>
+
+        </section>
+
+
+        <!-- DESCRIPTIVE STATISTICS -->
+
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Descriptive Statistics</h2>
+
+                    <p>
+                        Statistical summary of numerical variables.
+                    </p>
+
+                </div>
+
+                <span class="csv-badge">NUMERICAL ANALYSIS</span>
+
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+                            <th>Statistic</th>
+                            <th>Variable</th>
+                            <th>Count</th>
+                            <th>Mean</th>
+                            <th>Std. Dev.</th>
+                            <th>Minimum</th>
+                            <th>Maximum</th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="statisticsTable">
+
+                        <tr>
+                            <td colspan="7" class="empty-state">
+                                Upload a CSV dataset to view statistics.
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- CATEGORICAL ANALYSIS -->
+
+        <section class="content-card frequency-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Categorical Frequency Analysis</h2>
+
+                    <p>
+                        Frequency distributions of categorical variables.
+                    </p>
+
+                </div>
+
+                <span class="csv-badge">CATEGORY ANALYSIS</span>
+
+            </div>
+
+            <div id="categoricalResults">
+
+                <p class="empty-state">
+                    Categorical analysis will appear here after uploading data.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- ANALYSIS INTERPRETATION -->
+
+        <section class="content-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <h2>Analysis Overview</h2>
+
+                    <p>
+                        Summary of the dataset's numerical and
+                        categorical structure.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div id="analysisSummary" class="empty-state">
+
+                Complete the exploratory analysis to view
+                the dataset summary.
+
+            </div>
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <p>
+                © 2026 Retail Sales Data Analytics |
+                Exploratory Data Analysis
+            </p>
+
+        </footer>
+
+    </main>
+
+</div>
+
+
+<script src="js/eda.js"></script>
+
+</body>
+
+</html>

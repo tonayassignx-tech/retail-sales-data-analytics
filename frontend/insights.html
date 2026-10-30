@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Insights & Recommendations | Retail Sales Analytics</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        /* ==============================
+           GENERAL PAGE LAYOUT
+        ============================== */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            display: flex;
+            width: 100%;
+            min-height: 100vh;
+        }
+
+        /* ==============================
+           SIDEBAR
+        ============================== */
+
+        .sidebar {
+            width: 195px;
+            min-width: 195px;
+            flex: 0 0 195px;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 14px;
+        }
+
+        .sidebar-brand img {
+            display: block;
+            width: 38px !important;
+            height: 38px !important;
+            max-width: 38px !important;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand h2 {
+            font-size: 15px;
+            line-height: 1.3;
+            margin: 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 14px;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        .sidebar-footer {
+            padding: 15px;
+            font-size: 11px;
+        }
+
+        /* ==============================
+           MAIN CONTENT
+        ============================== */
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            width: calc(100% - 195px);
+            padding: 25px;
+            overflow: hidden;
+            background: #f4f7fb;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .topbar h2 {
+            margin: 0 0 6px;
+            font-size: 21px;
+            color: #173b62;
+        }
+
+        .topbar p {
+            margin: 0;
+            color: #718096;
+            font-size: 12px;
+        }
+
+        .page-content {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ==============================
+           WELCOME SECTION
+        ============================== */
+
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 130px;
+            padding: 25px 30px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            background: linear-gradient(110deg, #143c65, #0878c5);
+            color: white;
+        }
+
+        .welcome-section h1 {
+            margin: 0 0 10px;
+            font-size: 25px;
+            color: white;
+        }
+
+        .welcome-section p {
+            max-width: 650px;
+            margin: 0;
+            color: #e4effa;
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        /* ==============================
+           ACTION BUTTON AND STATUS
+        ============================== */
+
+        .insight-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 18px 0 10px;
+        }
+
+        .insight-actions button {
+            padding: 11px 20px;
+            border: none;
+            border-radius: 6px;
+            background: #0879c9;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .insight-actions button:hover {
+            background: #0666a9;
+        }
+
+        .insight-status {
+            min-height: 18px;
+            margin: 8px 0 18px;
+            font-size: 12px;
+        }
+
+        .insight-status.success {
+            color: #16865e;
+        }
+
+        .insight-status.error {
+            color: #dc3545;
+        }
+
+        .insight-status.loading {
+            color: #0879c9;
+        }
+
+        /* ==============================
+           KPI CARDS
+        ============================== */
+
+        .stats-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            width: 100%;
+            margin: 18px 0 25px;
+        }
+
+        .stat-card {
+            min-width: 0;
+            padding: 20px;
+            background: white;
+            border: 1px solid #e0e7f0;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(20, 50, 85, 0.04);
+        }
+
+        .stat-card p {
+            margin: 12px 0 7px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .stat-card h2 {
+            margin: 7px 0;
+            color: #173b62;
+            font-size: 25px;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .stat-card small {
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: #e5f2ff;
+            color: #0879c9;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        /* ==============================
+           INSIGHT CONTENT CARDS
+        ============================== */
+
+        .insight-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin-top: 22px;
+        }
+
+        .insight-card {
+            min-width: 0;
+            padding: 23px;
+            background: white;
+            border: 1px solid #e0e7f0;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(20, 50, 85, 0.04);
+        }
+
+        .insight-card h3 {
+            margin: 0 0 12px;
+            color: #173b62;
+            font-size: 16px;
+        }
+
+        .insight-card p {
+            margin: 0 0 10px;
+            color: #718096;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .insight-list {
+            margin: 12px 0 0;
+            padding-left: 20px;
+            color: #475569;
+            font-size: 12px;
+            line-height: 1.9;
+        }
+
+        .insight-list li {
+            margin-bottom: 5px;
+            overflow-wrap: anywhere;
+        }
+
+        /* ==============================
+           RECOMMENDATIONS
+        ============================== */
+
+        .recommendation-item {
+            margin-top: 12px;
+            padding: 14px 16px;
+            background: #f4f8fc;
+            border-left: 4px solid #1685d1;
+            border-radius: 6px;
+            color: #334155;
+            font-size: 12px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        /* ==============================
+           ANALYTICAL SUMMARY
+        ============================== */
+
+        .summary-card {
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        .summary-card p {
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        /* ==============================
+           RESPONSIVE DESIGN
+        ============================== */
+
+        @media (max-width: 1100px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 750px) {
+            .app-container {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                min-height: auto;
+                flex: none;
+            }
+
+            .main-content {
+                width: 100%;
+                padding: 16px;
+            }
+
+            .insight-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                padding: 22px;
+            }
+
+            .welcome-section h1 {
+                font-size: 21px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .insight-card {
+                padding: 18px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <img
+                src="assets/logo.png"
+                alt="Retail Analytics Logo"
+            >
+
+            <h2>Retail Analytics</h2>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="index.html">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="cleaning.html">
+                <span>▤</span>
+                Data Cleaning Preparation
+            </a>
+
+            <a href="eda.html">
+                <span>⌕</span>
+                Exploratory Data Analysis
+            </a>
+
+            <a href="dashboard.html">
+                <span>▥</span>
+                Data Visualisation & Dashboard
+            </a>
+
+            <a href="insights.html" class="active">
+                <span>✧</span>
+                Insights & Recommendations
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Retail Sales Data Analytics</p>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+                <h2>Insights & Recommendations</h2>
+
+                <p>
+                    Transform retail data into meaningful business decisions.
+                </p>
+            </div>
+
+        </header>
+
+
+        <section class="page-content">
+
+            <!-- WELCOME BANNER -->
+            <div class="welcome-section">
+
+                <div>
+
+                    <h1>Business Insights</h1>
+
+                    <p>
+                        Review key findings, identify data-quality issues
+                        and explore actionable recommendations based on
+                        your uploaded retail sales dataset.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- REFRESH BUTTON -->
+            <div class="insight-actions">
+
+                <button
+                    type="button"
+                    onclick="loadInsights()"
+                >
+                    Refresh Insights
+                </button>
+
+            </div>
+
+            <p
+                id="insightStatus"
+                class="insight-status loading"
+                aria-live="polite"
+            >
+                Upload a dataset to generate insights.
+            </p>
+
+
+            <!-- KPI CARDS -->
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">▤</div>
+
+                    <p>Total Records</p>
+
+                    <h2 id="insightRecords">--</h2>
+
+                    <small>Dataset entries</small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">£</div>
+
+                    <p>Total Revenue</p>
+
+                    <h2 id="insightRevenue">--</h2>
+
+                    <small>Recorded sales value</small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">✓</div>
+
+                    <p>Data Quality</p>
+
+                    <h2 id="insightQuality">--</h2>
+
+                    <small>Based on missing values and duplicates</small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">✧</div>
+
+                    <p>Key Findings</p>
+
+                    <h2 id="insightCount">--</h2>
+
+                    <small>Generated observations</small>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANALYTICAL FINDINGS AND RECOMMENDATIONS -->
+            <div class="insight-grid">
+
+
+                <!-- KEY FINDINGS -->
+                <div class="insight-card">
+
+                    <h3>Key Analytical Findings</h3>
+
+                    <p>
+                        Important observations generated from the
+                        uploaded retail dataset.
+                    </p>
+
+                    <ul
+                        id="findingsList"
+                        class="insight-list"
+                    >
+
+                        <li>
+                            Upload a dataset to view analytical findings.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- BUSINESS RECOMMENDATIONS -->
+                <div class="insight-card">
+
+                    <h3>Business Recommendations</h3>
+
+                    <p>
+                        Suggested actions to support retail business
+                        performance and decision-making.
+                    </p>
+
+                    <div id="recommendationsList">
+
+                        <p>
+                            Recommendations will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATA QUALITY -->
+                <div class="insight-card">
+
+                    <h3>Data Quality Observations</h3>
+
+                    <p>
+                        Review missing values, duplicate records and
+                        other dataset quality indicators.
+                    </p>
+
+                    <ul
+                        id="qualityList"
+                        class="insight-list"
+                    >
+
+                        <li>
+                            Data-quality observations will appear here.
+                        </li>
+
+                    </ul>
+
+                </div>
+
+
+                <!-- BUSINESS INTERPRETATION -->
+                <div class="insight-card">
+
+                    <h3>Business Interpretation</h3>
+
+                    <p id="businessInterpretation">
+
+                        Upload a dataset to generate a business interpretation.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANALYTICAL SUMMARY -->
+            <div class="insight-card summary-card">
+
+                <h3>Analytical Summary</h3>
+
+                <p id="analyticalSummary">
+
+                    The analytical summary will be generated after
+                    processing your retail dataset.
+
+                </p>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- JAVASCRIPT -->
+<script src="js/insights.js"></script>
+
+</body>
+</html>

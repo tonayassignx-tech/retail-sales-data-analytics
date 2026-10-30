@@ -1,0 +1,20 @@
+
+services:
+  - type: web
+    name: retail-sales-data-analytics
+    runtime: python
+    rootDir: backend
+
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+
+    healthCheckPath: /
+
+    plan: free
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.9
+
+      - key: PYTHONUNBUFFERED
+        value: "true"

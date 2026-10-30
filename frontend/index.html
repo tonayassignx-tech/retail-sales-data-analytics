@@ -1,0 +1,682 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Retail Sales Data Analytics</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f4f7fb;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 195px;
+            min-width: 195px;
+            flex: 0 0 195px;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 14px;
+        }
+
+        .sidebar-brand img {
+            width: 38px !important;
+            height: 38px !important;
+            max-width: 38px !important;
+            object-fit: contain;
+            flex-shrink: 0;
+        }
+
+        .sidebar-brand h2 {
+            font-size: 15px;
+            margin: 0;
+        }
+
+        .sidebar-nav a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 13px 14px;
+            font-size: 12px;
+            text-decoration: none;
+        }
+
+        /* MAIN CONTENT */
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            width: calc(100% - 195px);
+            padding: 25px;
+            overflow: hidden;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 22px;
+        }
+
+        .topbar h2 {
+            color: #173b62;
+            font-size: 21px;
+            margin: 0 0 6px;
+        }
+
+        .topbar p {
+            color: #718096;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .page-content {
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        /* WELCOME BANNER */
+
+        .welcome-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 150px;
+            padding: 28px 30px;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            background: linear-gradient(110deg, #143c65, #0878c5);
+            color: white;
+        }
+
+        .welcome-section h1 {
+            color: white;
+            font-size: 26px;
+            margin: 0 0 12px;
+        }
+
+        .welcome-section p {
+            color: #e4effa;
+            max-width: 650px;
+            font-size: 13px;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* KPI CARDS */
+
+        .stats-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 18px;
+            margin: 20px 0 28px;
+        }
+
+        .stat-card {
+            min-width: 0;
+            padding: 20px;
+            background: white;
+            border: 1px solid #e0e7f0;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(20, 50, 85, 0.04);
+        }
+
+        .stat-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: #e5f2ff;
+            color: #0879c9;
+            font-size: 17px;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            font-size: 12px;
+            margin: 12px 0 7px;
+        }
+
+        .stat-card h2 {
+            color: #173b62;
+            font-size: 25px;
+            margin: 7px 0;
+            overflow-wrap: anywhere;
+        }
+
+        .stat-card small {
+            color: #94a3b8;
+            font-size: 10px;
+        }
+
+        /* CSV UPLOAD */
+
+        .upload-section {
+            padding: 25px;
+            margin-bottom: 25px;
+            background: white;
+            border: 1px solid #e0e7f0;
+            border-radius: 12px;
+            box-shadow: 0 3px 12px rgba(20, 50, 85, 0.04);
+        }
+
+        .upload-section h3 {
+            color: #173b62;
+            font-size: 17px;
+            margin: 0 0 8px;
+        }
+
+        .upload-section > p {
+            color: #718096;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .upload-area {
+            margin-top: 18px;
+            padding: 25px;
+            text-align: center;
+            background: #f7faff;
+            border: 2px dashed #b7cce2;
+            border-radius: 10px;
+        }
+
+        .upload-area input[type="file"] {
+            display: block;
+            width: 100%;
+            max-width: 350px;
+            margin: 15px auto;
+            font-size: 12px;
+        }
+
+        .upload-area button {
+            padding: 11px 22px;
+            border: none;
+            border-radius: 6px;
+            background: #0879c9;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .upload-area button:hover {
+            background: #0666a9;
+        }
+
+        .upload-area button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #fileName {
+            display: block;
+            margin: 10px 0;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .upload-status {
+            margin-top: 14px;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .upload-status.success {
+            color: #16865e;
+        }
+
+        .upload-status.error {
+            color: #dc3545;
+        }
+
+        .upload-status.loading {
+            color: #0879c9;
+        }
+
+        /* MODULE CARDS */
+
+        .section-heading {
+            margin: 28px 0 15px;
+        }
+
+        .section-heading h3 {
+            color: #173b62;
+            font-size: 18px;
+            margin: 0 0 6px;
+        }
+
+        .section-heading p {
+            color: #718096;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+        }
+
+        .module-card {
+            display: block;
+            padding: 22px;
+            background: white;
+            border: 1px solid #e0e7f0;
+            border-radius: 12px;
+            text-decoration: none;
+            box-shadow: 0 3px 12px rgba(20, 50, 85, 0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .module-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 18px rgba(20, 50, 85, 0.09);
+        }
+
+        .module-card h3 {
+            color: #173b62;
+            font-size: 15px;
+            margin: 0 0 10px;
+        }
+
+        .module-card p {
+            color: #718096;
+            font-size: 12px;
+            line-height: 1.7;
+            margin: 0 0 14px;
+        }
+
+        .module-link {
+            color: #0879c9;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1050px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 750px) {
+            .app-container {
+                display: block;
+            }
+
+            .sidebar {
+                width: 100%;
+                min-width: 0;
+                min-height: auto;
+                flex: none;
+            }
+
+            .main-content {
+                width: 100%;
+                padding: 16px;
+            }
+
+            .module-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-section {
+                padding: 22px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="sidebar-brand">
+
+            <img
+                src="assets/logo.png"
+                alt="Retail Analytics Logo"
+            >
+
+            <h2>Retail Analytics</h2>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a href="index.html" class="active">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="cleaning.html">
+                <span>▤</span>
+                Data Cleaning Preparation
+            </a>
+
+            <a href="eda.html">
+                <span>⌕</span>
+                Exploratory Data Analysis
+            </a>
+
+            <a href="dashboard.html">
+                <span>▥</span>
+                Data Visualisation & Dashboard
+            </a>
+
+            <a href="insights.html">
+                <span>✧</span>
+                Insights & Recommendations
+            </a>
+
+        </nav>
+
+        <div class="sidebar-footer">
+            <p>Retail Sales Data Analytics</p>
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content">
+
+        <!-- TOPBAR -->
+
+        <header class="topbar">
+
+            <div>
+
+                <h2>Retail Sales Data Analytics</h2>
+
+                <p>
+                    Retail performance monitoring and data-driven
+                    business analysis.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <section class="page-content">
+
+
+            <!-- WELCOME BANNER -->
+
+            <div class="welcome-section">
+
+                <div>
+
+                    <h1>Welcome to Retail Analytics</h1>
+
+                    <p>
+                        Upload your retail sales dataset, prepare and
+                        clean your data, explore statistical patterns,
+                        visualise sales performance and generate
+                        actionable business insights.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- KPI CARDS -->
+
+            <div class="stats-grid">
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">▤</div>
+
+                    <p>Total Records</p>
+
+                    <h2 id="totalRecords">0</h2>
+
+                    <small>Dataset entries</small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">£</div>
+
+                    <p>Total Revenue</p>
+
+                    <h2 id="totalRevenue">0</h2>
+
+                    <small>Recorded sales value</small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">▥</div>
+
+                    <p>Total Quantity</p>
+
+                    <h2 id="totalQuantity">0</h2>
+
+                    <small>Units sold</small>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <div class="stat-icon">▦</div>
+
+                    <p>Numeric Variables</p>
+
+                    <h2 id="totalColumns">0</h2>
+
+                    <small>Analytical fields</small>
+
+                </div>
+
+            </div>
+
+
+            <!-- CSV UPLOAD SECTION -->
+
+            <div class="upload-section">
+
+                <h3>Upload Retail Sales Dataset</h3>
+
+                <p>
+                    Select a CSV file to begin the data analysis process.
+                    Maximum file size: 10 MB.
+                </p>
+
+                <div class="upload-area">
+
+                    <div style="font-size:32px;color:#0879c9;">
+                        ⇧
+                    </div>
+
+                    <h3>Select Your CSV Dataset</h3>
+
+                    <p>
+                        Supported format: CSV
+                    </p>
+
+                    <input
+                        type="file"
+                        id="csvFile"
+                        accept=".csv,text/csv"
+                    >
+
+                    <span id="fileName">
+                        No file selected
+                    </span>
+
+                    <button
+                        id="uploadButton"
+                        type="button"
+                        onclick="uploadCSV()"
+                    >
+                        Upload Dataset
+                    </button>
+
+                    <p
+                        id="uploadStatus"
+                        class="upload-status"
+                        aria-live="polite"
+                    >
+                        Select a CSV file to get started.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ANALYTICAL MODULES -->
+
+            <div class="section-heading">
+
+                <h3>Analytical Modules</h3>
+
+                <p>
+                    Explore the different stages of the retail
+                    sales data analysis process.
+                </p>
+
+            </div>
+
+
+            <div class="module-grid">
+
+
+                <!-- DATA CLEANING -->
+
+                <a href="cleaning.html" class="module-card">
+
+                    <h3>Data Cleaning Preparation</h3>
+
+                    <p>
+                        Assess missing values, identify duplicate
+                        records and prepare the dataset for analysis.
+                    </p>
+
+                    <span class="module-link">
+                        Open Data Cleaning →
+                    </span>
+
+                </a>
+
+
+                <!-- EDA -->
+
+                <a href="eda.html" class="module-card">
+
+                    <h3>Exploratory Data Analysis</h3>
+
+                    <p>
+                        Examine descriptive statistics, numerical
+                        distributions and categorical frequencies.
+                    </p>
+
+                    <span class="module-link">
+                        Open EDA →
+                    </span>
+
+                </a>
+
+
+                <!-- DASHBOARD -->
+
+                <a href="dashboard.html" class="module-card">
+
+                    <h3>Data Visualisation & Dashboard</h3>
+
+                    <p>
+                        Explore key performance indicators, revenue
+                        distribution and categorical visualisations.
+                    </p>
+
+                    <span class="module-link">
+                        Open Dashboard →
+                    </span>
+
+                </a>
+
+
+                <!-- INSIGHTS -->
+
+                <a href="insights.html" class="module-card">
+
+                    <h3>Insights & Recommendations</h3>
+
+                    <p>
+                        Review analytical findings, evaluate data
+                        quality and identify potential business actions.
+                    </p>
+
+                    <span class="module-link">
+                        View Business Insights →
+                    </span>
+
+                </a>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- CSV UPLOAD JAVASCRIPT -->
+
+<script src="js/main.js"></script>
+<script src="js/upload.js"></script>
+
+</body>
+
+</html>
